@@ -7,10 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppOrderNegativeTest {
 
@@ -22,7 +24,7 @@ public class AppOrderNegativeTest {
     }
 
     @BeforeEach
-    public void beforeEach (){
+    public void beforeEach() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -32,10 +34,11 @@ public class AppOrderNegativeTest {
     }
 
     @AfterEach
-    public void afterEach(){
+    public void afterEach() {
         driver.quit();
         driver = null;
     }
+
     @Test
     public void shouldFailInvalidName() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Ivan Ivanov");
@@ -76,4 +79,15 @@ public class AppOrderNegativeTest {
                 driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim());
     }
 
+    @Test
+    void shouldFailInvalidName6() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Иван Иванов");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79452567156");
+
+        driver.findElement(By.className("button_theme_alfa-on-white")).click();
+
+        WebElement element = driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid .checkbox__text"));
+
+        assertTrue(element.isDisplayed());
+    }
 }
